@@ -32,7 +32,7 @@ namespace ReviewApp.Repository
 
         public Pokemon GetPokemon(string name)
         {
-            return _context.Pokemons.Where(p => p.Name == name).FirstOrDefault();
+            return _context.Pokemons.Where(p => p.Name == name).FirstOrDefault(); 
         }
 
     public decimal GetPokemonRating(int pokeId)
