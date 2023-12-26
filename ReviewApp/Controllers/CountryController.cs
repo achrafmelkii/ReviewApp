@@ -5,6 +5,7 @@ using ReviewApp.Dto;
 using ReviewApp.Interfaces;
 using ReviewApp.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ReviewApp.Controllers
 {
@@ -63,37 +64,37 @@ namespace ReviewApp.Controllers
             return Ok(country);
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(204)]
-        //[ProducesResponseType(400)]
-        //public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
-        //{
-        //    if (countryCreate == null)
-        //        return BadRequest(ModelState);
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCountry([FromBody] CountryDto countryCreate)
+        {
+            if (countryCreate == null)
+                return BadRequest(ModelState);
 
-        //    var country = _countryRepository.GetCountries()
-        //        .Where(c => c.Name.Trim().ToUpper() == countryCreate.Name.TrimEnd().ToUpper())
-        //        .FirstOrDefault();
+            var country = _countryRepository.GetCountries()
+                .Where(c => c.Name.Trim().ToUpper() == countryCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
 
-        //    if (country != null)
-        //    {
-        //        ModelState.AddModelError("", "Country already exists");
-        //        return StatusCode(422, ModelState);
-        //    }
+            if (country != null)
+            {
+                ModelState.AddModelError("", "Country already exists");
+                return StatusCode(422, ModelState);
+            }
 
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //    var countryMap = _mapper.Map<Country>(countryCreate);
+            var countryMap = _mapper.Map<Country>(countryCreate);
 
-        //    if (!_countryRepository.CreateCountry(countryMap))
-        //    {
-        //        ModelState.AddModelError("", "Something went wrong while savin");
-        //        return StatusCode(500, ModelState);
-        //    }
+            if (!_countryRepository.CreateCountry(countryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
 
-        //    return Ok("Successfully created");
-        //}
+            return Ok("Successfully created");
+        }
 
         //[HttpPut("{countryId}")]
         //[ProducesResponseType(400)]

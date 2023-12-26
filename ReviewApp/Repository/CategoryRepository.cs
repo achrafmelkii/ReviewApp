@@ -19,11 +19,15 @@ namespace ReviewApp.Repository
             return _context.Categories.Any(c => c.Id == id);
         }
 
-        //public bool CreateCategory(Category category)
-        //{
-        //    _context.Add(category);
-        //    return Save();
-        //}
+        public bool CreateCategory(Category category)
+        {
+            //change trackker
+            //add update modify
+            //connected vs disconn
+            ////enititystate.added (disconnected )
+            _context.Add(category);
+            return Save();
+        }
 
         //public bool DeleteCategory(Category category)
         //{
@@ -46,11 +50,11 @@ namespace ReviewApp.Repository
             return _context.PokemonCategories.Where(e => e.CategoryId == categoryId).Select(c => c.Pokemon).ToList();
         }
 
-        //public bool Save()
-        //{
-        //    var saved = _context.SaveChanges();
-        //    return saved > 0 ? true : false;
-        //}
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
 
         //public bool UpdateCategory(Category category)
         //{

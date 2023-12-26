@@ -17,6 +17,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ReviewApp.Interface;
 using ReviewApp.Repository;
+using ReviewApp.Interfaces;
+using System.Text.Json.Serialization;
 
 namespace ReviewApp
 {
@@ -35,8 +37,16 @@ namespace ReviewApp
              
             services.AddControllers();
             services.AddTransient<Seed>();
+            services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IPokemonRepository, PokemonRepository>();
+            services.AddScoped<ICategoryRepository,CategoryRepository>();//wire our dependancies injection 
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IReviewerRepository, ReviewerRepository>();
+            services.AddScoped<IOwnerRepository,OwnerRepository>(); // add thit to make areferenace from the interface to the class
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(c =>

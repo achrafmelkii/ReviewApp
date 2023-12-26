@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using ReviewApp.Dto;
 using ReviewApp.Interface;
-using ReviewApp.Interfaces;
+
 using ReviewApp.Models;
-using ReviewApp.Repository;
+
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
+using System.Linq;
+
 
 namespace ReviewApp.Controllers
 {
@@ -53,7 +54,7 @@ namespace ReviewApp.Controllers
             return Ok(owner);
         }
 
-        [HttpGet ("{ownerId/pokemon")]
+        [HttpGet ("{ownerId}/pokemon")]
         [ProducesResponseType(200, Type = typeof(Owner))]
         [ProducesResponseType(400)]
         public IActionResult GetPokemonByOwner(int ownerId)
@@ -69,6 +70,38 @@ namespace ReviewApp.Controllers
                 return BadRequest();
 
             return Ok(pokemon);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateOwner([FromBody] OwnerDto ownerCreate)
+        {
+            if (ownerCreate == null)
+                return BadRequest(ModelState);
+
+            var owner = _ownerRepository.GetOwners()
+                .Where(c => c.FirstName.Trim().ToUpper() == ownerCreate.FirstName.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (owner != null)
+            {
+                ModelState.AddModelError("", "Country already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var ownermap = _mapper.Map<Owner>(ownerCreate);
+
+            if (!_ownerRepository.CreateOwner(ownermap))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
         }
     }
 }

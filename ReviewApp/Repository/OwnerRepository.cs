@@ -12,17 +12,17 @@ namespace ReviewApp.Repository
         private DataContext _context;
         public OwnerRepository(DataContext context)
         {
-            _context = context;      
+            _context = context;
         }
         public Owner GetOwner(int ownerId)
         {
-            return _context.Owners.Where(o=> o.id == ownerId).FirstOrDefault();
+            return _context.Owners.Where(o => o.Id == ownerId).FirstOrDefault();
         }
 
         public ICollection<Owner> GetOwnerOfAPokemon(int pokeId)
         {
-           return _context.PokemonOwners.Where(po=> po.PokemonId == pokeId).Select(p=>p.Owner).tol();
-       
+            return _context.PokemonOwners.Where(po => po.PokemonId == pokeId).Select(p => p.Owner).ToList();
+
         }
 
         public ICollection<Owner> GetOwners()
@@ -32,12 +32,28 @@ namespace ReviewApp.Repository
 
         public ICollection<Pokemon> GetPokemonByOwner(int ownerId)
         {
-return _context.PokemonOwners.Where(po =>po.OwnerId == ownerId).Select(p => p.Pokemon).ToList();    
+            return _context.PokemonOwners.Where(po => po.OwnerId == ownerId).Select(p => p.Pokemon).ToList();
         }
 
         public bool OwnerExists(int ownerId)
         {
-           return _context.Owners.Any(o => o.Id == ownerId);
+            return _context.Owners.Any(o => o.Id == ownerId);
+        }
+
+
+        public bool CreateOwner(Owner owner)
+        {
+            //change trackker
+            //add update modify
+            //connected vs disconn
+            ////enititystate.added (disconnected )
+            _context.Add(owner);
+            return Save();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

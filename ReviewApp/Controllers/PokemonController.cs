@@ -6,7 +6,7 @@ using ReviewApp.Interface;
 using ReviewApp.Models;
 using System.Collections.Generic;
 
-namespace PokemonReviewApp.Controllers
+namespace ReviewApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
