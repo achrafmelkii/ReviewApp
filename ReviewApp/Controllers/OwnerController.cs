@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReviewApp.Dto;
 using ReviewApp.Interface;
-
+using ReviewApp.Interfaces;
 using ReviewApp.Models;
 
 using System.Collections.Generic;
@@ -12,17 +12,20 @@ using System.Linq;
 namespace ReviewApp.Controllers
 {
 
+
     [Route("api/[controller]")]
     [ApiController]
     public class OwnerController : Controller
     {
 
         private readonly IOwnerRepository _ownerRepository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IMapper _mapper;
 
-        public OwnerController(IOwnerRepository ownerRepository, IMapper mapper)
+        public OwnerController(IOwnerRepository ownerRepository, ICountryRepository countryRepository, IMapper mapper)
         {
             _ownerRepository = ownerRepository;
+            _countryRepository = countryRepository;
             _mapper = mapper;
         }
 
@@ -75,18 +78,18 @@ namespace ReviewApp.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateOwner([FromBody] OwnerDto ownerCreate)
+        public IActionResult CreateOwner([FromQuery ] int countryId,[FromBody] OwnerDto ownerCreate)
         {
             if (ownerCreate == null)
                 return BadRequest(ModelState);
 
             var owner = _ownerRepository.GetOwners()
-                .Where(c => c.FirstName.Trim().ToUpper() == ownerCreate.FirstName.TrimEnd().ToUpper())
+                .Where(c => c.LastName.Trim().ToUpper() == ownerCreate.LastName.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
             if (owner != null)
             {
-                ModelState.AddModelError("", "Country already exists");
+                ModelState.AddModelError("", "owner already exists");
                 return StatusCode(422, ModelState);
             }
 
@@ -94,6 +97,7 @@ namespace ReviewApp.Controllers
                 return BadRequest(ModelState);
 
             var ownermap = _mapper.Map<Owner>(ownerCreate);
+            ownermap.Country = _countryRepository.GetCountry(countryId);
 
             if (!_ownerRepository.CreateOwner(ownermap))
             {
