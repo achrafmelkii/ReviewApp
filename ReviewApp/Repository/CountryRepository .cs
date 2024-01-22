@@ -4,6 +4,7 @@ using ReviewApp.Data;
 using ReviewApp.Interfaces;
 using ReviewApp.Models;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 
 namespace ReviewApp.Repository
@@ -29,11 +30,11 @@ namespace ReviewApp.Repository
             return Save();
         }
 
-        //public bool DeleteCountry(Country country)
-        //{
-        //    _context.Remove(country);
-        //    return Save();
-        //}
+        public bool DeleteCountry(Country country)
+        {
+            _context.Remove(country);
+            return Save();
+        }
 
         public ICollection<Country> GetCountries()
         {
@@ -61,11 +62,10 @@ namespace ReviewApp.Repository
             return saved > 0 ? true : false;
         }
 
-        //public bool UpdateCountry(Country country)
-        //{
-        //    _context.Update(country);
-        //    return Save();
-        //}
-
+        public bool UpdateCountry(Country country)
+        {
+            _context.Update(country);
+            return Save();
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace ReviewApp.Interfaces
         bool CountryExists(int id);
         bool CreateCountry(Country country);
         bool Save();
+        bool UpdateCountry(Country country);
+        bool DeleteCountry(Country country);
     }
 }

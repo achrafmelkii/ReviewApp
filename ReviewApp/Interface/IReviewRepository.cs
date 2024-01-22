@@ -11,5 +11,8 @@ namespace ReviewApp.Interface
         bool ReviewExists(int reviewId);
         bool CreateReview(Review review);
         bool Save();
+        bool UpdateReview(Review review);
+        bool DeleteReview(Review review);
+        bool DeleteReviews(List<Review> reviews);
     }
 }

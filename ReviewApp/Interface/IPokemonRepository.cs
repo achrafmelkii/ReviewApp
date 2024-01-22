@@ -18,6 +18,8 @@ namespace ReviewApp.Interface
 
         bool CreatePokemon(int ownerId, int categoryId, Pokemon pokemon);
         bool Save();
+        bool UpdatePokemon(int ownerId,int categoryId,Pokemon pokemon);
 
+        bool DeletePokemon(Pokemon pokemon);
     }
 }
